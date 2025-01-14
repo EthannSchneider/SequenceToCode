@@ -26,15 +26,15 @@ classDiagram
 
     class DriverNotFoundException
 
-    Driver --|> Person
+    Driver ..|> Person
 
-    Enterprise --> Driver
-    Enterprise --> Vehicle
+    Enterprise o-- Driver
+    Enterprise o-- Vehicle
 
-    Driver --> VehiculeAlreadyAssignedException
+    Driver ..> VehiculeAlreadyAssignedException : throws
 
     Driver --> Vehicle
 
-    Enterprise --> VehiculeNotFoundException
-    Enterprise --> DriverNotFoundException
+    Enterprise o-- VehiculeNotFoundException
+    Enterprise o-- DriverNotFoundException
 ```

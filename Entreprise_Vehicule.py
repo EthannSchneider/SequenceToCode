@@ -1,26 +1,38 @@
 class Person:
-    def __init__(self, emailAddress: str):
-        self.__emailAddress = emailAddress
+    def __init__(self, email_address: str):
+        self._email_address = email_address
+
+    @property
+    def email_address(self):
+        return self._email_address
 
 
 class Driver(Person):
-    def takeAVehicle(self, vehicle):
-        if hasattr(self, '__vehicles'):
-            raise VehiculeAlreadyAssignedException(
+    def __init__(self, email_address: str):
+        super().__init__(email_address)
+        self._vehicle = None
+
+    def take_a_vehicle(self, vehicle):
+        if self._vehicle is not None:
+            raise VehicleAlreadyAssignedException(
                 "Driver already has a vehicle assigned.")
-        self.__vehicle = vehicle
+        self._vehicle = vehicle
 
 
 class Vehicle:
-    def __init__(self, chassisNumber: str):
-        self.__chassisNumber = chassisNumber
+    def __init__(self, chassis_number: str):
+        self._chassis_number = chassis_number
+
+    @property
+    def chassis_number(self):
+        return self._chassis_number
 
 
-class VehiculeAlreadyAssignedException(Exception):
+class VehicleAlreadyAssignedException(Exception):
     pass
 
 
-class VehiculeNotFoundException(Exception):
+class VehicleNotFoundException(Exception):
     pass
 
 
@@ -30,22 +42,28 @@ class DriverNotFoundException(Exception):
 
 class Enterprise:
     def __init__(self):
-        self.__drivers = {}
-        self.__vehicles = {}
+        self._drivers = {}
+        self._vehicles = {}
 
-    def assignVehicleToDriver(self, chassisNumber: str, driverEmailAddress: str):
-        driver = self.getDriverByEmailAddress(driverEmailAddress)
-        vehicle = self.getVehicleByChassisNumber(chassisNumber)
-        driver.takeAVehicle(vehicle)
+    def assign_vehicle_to_driver(self, chassis_number: str, driver_email_address: str):
+        driver = self.get_driver_by_email_address(driver_email_address)
+        vehicle = self.get_vehicle_by_chassis_number(chassis_number)
+        driver.take_a_vehicle(vehicle)
 
-    def getDriverByEmailAddress(self, emailAddress: str):
-        if emailAddress not in self.__drivers:
+    def get_driver_by_email_address(self, email_address: str):
+        if email_address not in self._drivers:
             raise DriverNotFoundException(
-                f"Driver with email {emailAddress} not found.")
-        return self.__drivers[emailAddress]
+                f"Driver with email {email_address} not found.")
+        return self._drivers[email_address]
 
-    def getVehicleByChassisNumber(self, chassisNumber: str):
-        if chassisNumber not in self.__vehicles:
-            raise VehiculeNotFoundException(f"Vehicle with chassis number {
-                                            chassisNumber} not found.")
-        return self.__vehicles[chassisNumber]
+    def get_vehicle_by_chassis_number(self, chassis_number: str):
+        if chassis_number not in self._vehicles:
+            raise VehicleNotFoundException(f"Vehicle with chassis number {
+                                           chassis_number} not found.")
+        return self._vehicles[chassis_number]
+
+    def add_driver(self, driver: Driver):
+        self._drivers[driver.email_address] = driver
+
+    def add_vehicle(self, vehicle: Vehicle):
+        self._vehicles[vehicle.chassis_number] = vehicle
